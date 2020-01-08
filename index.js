@@ -53,6 +53,8 @@ function convertElectronMenu(
   event,
   template,
 ) {
+  const elem = document.activeElement;
+
   return arraySplit(
     template.filter(item => item.visible !== false),
     item => item.type === 'separator',
@@ -72,16 +74,8 @@ function convertElectronMenu(
             sublabel: getTextForAccelerator(item.accelerator),
             onClick: () => {
               if (item.command != null) {
-                if (item.command.indexOf('tree-view:') === 0) {
-                  const pkg = atom.packages.getActivePackage('tree-view');
-
-                  if (pkg && pkg.mainModule && pkg.mainModule.getTreeViewInstance) {
-                    const treeView = pkg.mainModule.getTreeViewInstance();
-
-                    if (treeView.focus) {
-                      treeView.focus();
-                    }
-                  }
+                if (elem) {
+                  elem.focus();
                 }
 
                 atom.commands.dispatch(event.target, item.command);
